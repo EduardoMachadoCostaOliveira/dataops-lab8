@@ -27,40 +27,40 @@ Resources:
                 - !Ref S3BucketEntrega
                 - /* 
             Principal: '*' 
-            Sid: 'PublicReadGetObject' 
-	# API gateway - criação de endpoints de API para acesso aos dados 
-	ApiGatewayEntrega: 
-		Type: AWS::Serverless::Api 
-		Properties: 
-        StageName: prod 
+            Sid: 'PublicReadGetObject'
+    # API gateway - criação de endpoints de API para acesso aos dados 
+    ApiGatewayEntrega: 
+      Type: AWS::Serverless::Api 
+      Properties:
+        StageName: prod
         OpenApiVersion: '2.0' 
-	# Função lambda para executar o código da API 
+    # Função lambda para executar o código da API 
     LambdaEntrega: 
-			Type: 'AWS::Serverless::Function' 
-			Properties: 
-				FunctionName: dataops-entrega #nome da função 
-				Handler: charts.handler # nome do arquivo e método de onde está a função 
-				Runtime: python3.7 # ambiente de execução 
-				CodeUri: ./app # local onde estarão os arquivos da função 
-				Description: Dados para criação de gráficos. 
-				MemorySize: 256 # memória utilizada pela funçãop 
-				Timeout: 30 # tempo máximo de execução, em segundos 
-				Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LabRole # IAM role da função para permissões a outros recursos da AWS 
-				Events: 
-					ApiEvent: 
-						Type: Api 
-						Properties: 
-							Path: / 
-							Method: get 
-							RestApiId: 
-								Ref: ApiGatewayEntrega 
-# Saída do CloudFormation - URL do bucket 
-Outputs: 
-	WebsiteURL: 
-		Value: !GetAtt 
-			- S3BucketEntrega  
-			- WebsiteURL 
-		Description: URL do site no S3 
-	APIGatewayURL: 
-		Description: URL das APIs 
-		Value: !Sub "https://${ApiGatewayEntrega}.execute-api.${AWS::Region}.amazonaws.com/prod/" 
+      Type: 'AWS::Serverless::Function' 
+      Properties: 
+        FunctionName: dataops-entrega #nome da função 
+        Handler: charts.handler # nome do arquivo e método de onde está a função 
+        Runtime: python3.7 # ambiente de execução 
+        CodeUri: ./app # local onde estarão os arquivos da função 
+        Description: Dados para criação de gráficos. 
+        MemorySize: 256 # memória utilizada pela funçãop 
+        Timeout: 30 # tempo máximo de execução, em segundos 
+        Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LabRole # IAM role da função para permissões a outros recursos da AWS 
+        Events: 
+          ApiEvent: 
+            Type: Api 
+          Properties: 
+            Path: / 
+            Method: get 
+            RestApiId: 
+              Ref: ApiGatewayEntrega 
+    # Saída do CloudFormation - URL do bucket 
+    Outputs: 
+      WebsiteURL: 
+        Value: !GetAtt 
+          - S3BucketEntrega  
+          - WebsiteURL 
+        Description: URL do site no S3 
+    APIGatewayURL: 
+      Description: URL das APIs 
+      Value: !Sub "https://${ApiGatewayEntrega}.execute-api.${AWS::Region}.amazonaws.com/prod/" 
