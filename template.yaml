@@ -2,29 +2,29 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31' 
 Description: Aplicação servelerless para entrega do data pipeline. 
 Resources:
-	# Bucket para aplicação estatica com JS 
-	S3BucketEntrega:
-		Type: 'AWS::S3::Bucket' 
-		Properties: 
-			AccessControl: PublicRead # Habilitar leitura publica do bucket 
-			BucketName: dataops-entrega-eduardooliveira # nome do bucket 
-			WebsiteConfiguration: 
-				IndexDocument: index.html # arquivo index da aplicação 
-	# Política de acesso ao Bucket, para poder acessar de qualquer lugar 
-	BucketEntregaPolicy: 
+  # Bucket para aplicação estatica com JS 
+  S3BucketEntrega:
+    Type: 'AWS::S3::Bucket'
+    Properties: 
+      AccessControl: PublicRead # Habilitar leitura publica do bucket 
+      BucketName: dataops-entrega-eduardooliveira # nome do bucket 
+      WebsiteConfiguration: 
+        IndexDocument: index.html # arquivo index da aplicação 
+  # Política de acesso ao Bucket, para poder acessar de qualquer lugar 
+  BucketEntregaPolicy: 
     Type: AWS::S3::BucketPolicy 
     Properties: 
-			Bucket: !Ref S3BucketEntrega 
-			PolicyDocument: 
-				Version: 2012-10-17 
-				Statement: 
-					- Action: 
-						- 's3:GetObject' 
+      Bucket: !Ref S3BucketEntrega 
+      PolicyDocument: 
+        Version: 2012-10-17 
+        Statement: 
+          - Action:
+              - 's3:GetObject' 
             Effect: Allow 
             Resource: !Join 
               - '' 
               - - 'arn:aws:s3:::' 
-                - !Ref S3BucketEntrega   
+                - !Ref S3BucketEntrega
                 - /* 
             Principal: '*' 
             Sid: 'PublicReadGetObject' 
