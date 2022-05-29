@@ -52,7 +52,7 @@ Resources:
           Properties: 
             Path: / 
             Method: get 
-            RestApiId: 
+            RestApiId:
               Ref: ApiGatewayEntrega 
     # Saída do CloudFormation - URL do bucket 
     Outputs: 
